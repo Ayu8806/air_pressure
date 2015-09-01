@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">气压计</string>
+    <string name="action_settings">设置</string>
+    <string name="action_about">关于</string>
+    
+    <string-array name="navigatoin_action">
+        <item>气压/海拔</item>
+        <item>地点</item>
+    </string-array>
+
+    <string name="open_drawer">open drawer</string>
+    <string name="close_drawer">close drawer</string>
+
+    <string name="add_cur_location">记录当前气压</string>
+
+    <string name="dialog_add_label">标记:</string>
+</resources>
