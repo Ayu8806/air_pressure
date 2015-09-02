@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by practice on 15-9-1.
  */
-public class LocationAirPressure extends SQLiteOpenHelper {
+public class LocationAirPressureDB extends SQLiteOpenHelper {
 
 
     /**
@@ -26,10 +26,10 @@ public class LocationAirPressure extends SQLiteOpenHelper {
         {
             public Long id;
             public String label;
-            public float airpressure;
-            public  float altitude;
-            public float lantitude;
-            public  float longtitude;
+            public double airpressure;
+            public  double altitude;
+            public double lantitude;
+            public  double longtitude;
             public String recordtime;
         }
 
@@ -42,15 +42,15 @@ public class LocationAirPressure extends SQLiteOpenHelper {
         private static final String createDB="create table airpressureRecord(" +
                 "id INTEGER primary key autoincrement," +
                 "label char(128) not null ,"+
-                "airpressure float not null," +    // comment '气压单位帕斯卡
-                "altitude float not null ," +//comment '海拔单位m'
-                "lantitude float not null ," +  //comment '纬度'
-                "longtitude float not null," +  // comment '精度'
+                "airpressure double not null," +    // comment '气压单位帕斯卡
+                "altitude double not null ," +//comment '海拔单位m'
+                "lantitude double not null ," +  //comment '纬度'
+                "longtitude double not null," +  // comment '精度'
                 "recordtime datetime not null " + //comment '记录时间'
                 ")";
 
 
-    public LocationAirPressure(Context context) {
+    public LocationAirPressureDB(Context context) {
         super(context, dataBaseName, null, version);
     }
 
@@ -61,8 +61,13 @@ public class LocationAirPressure extends SQLiteOpenHelper {
 
     }
 
-    public Long InsertData(String label,float airpressure,float altitude,float lantitude,float longtitude)
+    public Long InsertData(String label,double airpressure,double altitude,double lantitude,double longtitude)
     {
+        if(label.compareTo("")==0)
+        {
+            label=new SimpleDateFormat("yyyyMMDDHHMM").format(new Data());
+        }
+
         ContentValues value=new ContentValues();
         value.put("label",label);
         value.put("airpressure",airpressure);
@@ -78,6 +83,15 @@ public class LocationAirPressure extends SQLiteOpenHelper {
 
     }
 
+    public int UpdateLocation(long id,double lantitude ,double longtitude)
+    {
+        ContentValues value=new ContentValues();
+        value.put("lantitude", lantitude);
+        value.put("longtitude", longtitude);
+        return getWritableDatabase().update("airpressureRecord",value,"id="+id,null);
+    }
+
+
     public List<Data> getAll()
     {
 
@@ -89,10 +103,10 @@ public class LocationAirPressure extends SQLiteOpenHelper {
             int i=0;
             data.id=cursor.getLong(i++);
             data.label=cursor.getString(i++);
-            data.airpressure=cursor.getFloat(i++);
-            data.altitude=cursor.getFloat(i++);
-            data.lantitude=cursor.getFloat(i++);
-            data.longtitude=cursor.getFloat(i++);
+            data.airpressure=cursor.getDouble(i++);
+            data.altitude=cursor.getDouble(i++);
+            data.lantitude=cursor.getDouble(i++);
+            data.longtitude=cursor.getDouble(i++);
             data.recordtime=cursor.getString(i++);
         }
 

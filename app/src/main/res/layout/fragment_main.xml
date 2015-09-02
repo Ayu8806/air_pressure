@@ -1,0 +1,29 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.fighter.airpressure.mainFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <include
+            android:id="@+id/press_line"
+            layout="@layout/line_value"/>
+        <include
+            android:id="@+id/altitude_line"
+            layout="@layout/line_value"/>
+        <Button
+            android:text="@string/add_cur_location"
+            android:id="@+id/add_cur_location"
+            android:layout_width="match_parent"
+            android:textSize="@dimen/line_font_size"
+            android:onClick="onBtnAddClick"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</FrameLayout>

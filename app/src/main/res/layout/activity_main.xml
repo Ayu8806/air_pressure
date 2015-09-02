@@ -5,29 +5,12 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
-<LinearLayout
+<fragment
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
-
-    <include
-        android:id="@+id/press_line"
-        layout="@layout/line_value"/>
-    <include
-        android:id="@+id/altitude_line"
-        layout="@layout/line_value"/>
-    <Button
-        android:text="@string/add_cur_location"
-        android:id="@+id/add_cur_location"
-        android:layout_width="match_parent"
-        android:textSize="@dimen/line_font_size"
-        android:onClick="onBtnAddClick"
-        android:layout_height="wrap_content" />
-</LinearLayout>
-
+    android:id="@+id/main_fragment"
+    android:name="com.example.fighter.airpressure.mainFragment"
+    />
 
 <ListView android:id="@+id/left_drawer"
     android:layout_width="240dp"

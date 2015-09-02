@@ -1,11 +1,20 @@
 package com.example.fighter.airpressure;
 
 import android.app.AlertDialog;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,30 +26,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener{
+public class MainActivity extends AppCompatActivity{
 
-    private SensorManager mSensorManager;
-    private Sensor pressureSensor;
+
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    public final static String main_fragement_tag="main_fragement_tag";
+
+    public LocationAirPressureDB getDbHelper() {
+        return dbHelper;
+    }
+
+    private LocationAirPressureDB dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if(!InitSenSors())
-        {
-            finish();
-        }
-
-
 
         String [] navigationArr=getResources().getStringArray(R.array.navigatoin_action);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -74,10 +83,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_48dp);
 
 
-
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mDrawerList.setSelection(0);
+
+        mDrawerList.setItemChecked(0, true);
+
+        dbHelper=new LocationAirPressureDB(this);
+
+
+//        FragmentManager fragmentManager=getSupportFragmentManager();
+//      FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
 
     }
 
@@ -119,114 +134,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
 
-    /**
-     * 更新界面中的传感器数值
-     * @param pressure mbar
-     */
-    private void UpdateDisplay(float pressure)
-    {
-
-        LineValue press=new LineValue(findViewById(R.id.press_line));
-        LineValue altitude=new LineValue(findViewById(R.id.altitude_line));
-
-        press.SetValue("气压",pressure,"毫巴");
-        altitude.SetValue("海拔", pressureToattitude(pressure * 100.0f), "米");
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, pressureSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(this);
-    }
-
-    /**
-     * 初始化传感器
-     * @return
-     */
-    private boolean InitSenSors()
-    {
-
-        mSensorManager = (SensorManager) getSystemService(this.SENSOR_SERVICE);
-        if(mSensorManager==null)
-        {
-            return false;
-        }
-
-        pressureSensor=mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
-        if(pressureSensor==null)
-        {
-            Toast.makeText(this,"没有气压传感器",Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-
-        UpdateDisplay(event.values[0]);
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-    /**
-     * 将气压转换成高度
-     * 参考：https://en.wikipedia.org/wiki/Atmospheric_pressure#Altitude_variation
-     * @param pressure
-     * @return
-     */
-
-    public static double pressureToattitude(float pressure)
-    {
-        double p0=101325;
-        double R=8.31447;
-        double T0=288.15;
-        double g=9.80665;
-        double M=0.0289644;
-        float p=pressure;
-
-        return 0.0-java.lang.Math.log(p/p0)*((R*T0)/(g*M));
-    }
-
-
-    public void onBtnAddClick(View v) {
-
-        if(v.getId()==R.id.add_cur_location)
-        {
-
-            //添加当前地点
-
-            AlertDialog.Builder builder=new AlertDialog.Builder(this);
-            View view=LayoutInflater.from(this).inflate(R.layout.dialog_add,null);
-            builder.setView(view);
-            builder.setTitle("添加");
-
-            builder.setPositiveButton("添加", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-
-            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-            builder.show();
-            
-        }
 
     }
 
