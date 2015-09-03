@@ -5,11 +5,10 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<fragment
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main_fragment"
-    android:name="com.example.fighter.airpressure.mainFragment"
+    android:id="@+id/fragment_container"
     />
 
 <ListView android:id="@+id/left_drawer"

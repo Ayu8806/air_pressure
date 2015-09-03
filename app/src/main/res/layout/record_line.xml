@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="1">
+    
+    <TextView
+        android:id="@+id/record_label"
+        android:layout_marginLeft="@dimen/record_label_margin"
+        android:layout_width="@dimen/record_label_width"
+        android:text="青城山"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/record_pressure"
+        android:text="548毫巴"
+        android:layout_width="@dimen/record_pressure_width"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginLeft="@dimen/record_altitude_margin"
+        android:id="@+id/record_altitude"
+        android:text="890米"
+        android:layout_width="@dimen/record_altitude_width"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/record_date"
+        android:text="2015-09-03 11:45:23"
+        android:layout_width="@dimen/record_date_width"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.73" />
+
+</LinearLayout>

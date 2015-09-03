@@ -4,4 +4,12 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="line_font_size">24dp</dimen>
 
+
+    <dimen name="record_label_margin">20dp</dimen>
+    <dimen name="record_label_width">96dp</dimen>
+    <dimen name="record_pressure_width">60dp</dimen>
+    <dimen name="record_altitude_margin">10dp</dimen>
+    <dimen name="record_altitude_width">60dp</dimen>
+    <dimen name="record_date_width">120dp</dimen>
+
 </resources>

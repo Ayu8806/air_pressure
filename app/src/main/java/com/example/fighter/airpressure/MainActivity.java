@@ -1,6 +1,7 @@
 package com.example.fighter.airpressure;
 
 import android.app.AlertDialog;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
@@ -30,14 +31,20 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements  OnFragmentInteractionListener{
 
+    public final static int main_fragment=0;
+    public final static int record_fragment=1;
 
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    public final static String main_fragement_tag="main_fragement_tag";
+    String [] navigationArr=null;
+    public final static String []fragement_tagArr={"main_fragement_tag","record_fragement_tag"};
+
+    private Fragment curFragment;
+
 
     public LocationAirPressureDB getDbHelper() {
         return dbHelper;
@@ -51,7 +58,8 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String [] navigationArr=getResources().getStringArray(R.array.navigatoin_action);
+
+        navigationArr=getResources().getStringArray(R.array.navigatoin_action);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -89,11 +97,18 @@ public class MainActivity extends AppCompatActivity{
         mDrawerList.setItemChecked(0, true);
 
         dbHelper=new LocationAirPressureDB(this);
+        getSupportActionBar().setTitle(navigationArr[0]);
 
 
-//        FragmentManager fragmentManager=getSupportFragmentManager();
-//      FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        Fragment fragment = mainFragment.newInstance(navigationArr[0], fragement_tagArr[0]);
+        fragmentTransaction.add(R.id.fragment_container, fragment, fragement_tagArr[0]);
+        fragmentTransaction.show(fragment);
+        if(fragment.isDetached())
+            fragmentTransaction.attach(fragment);
+        fragmentTransaction.commit();
+        curFragment=fragment;
     }
 
     @Override
@@ -137,12 +152,16 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 
@@ -158,6 +177,51 @@ public class MainActivity extends AppCompatActivity{
     private void selectItem(int position) {
 
         mDrawerList.setItemChecked(position, true);
+
+        getSupportActionBar().setTitle(navigationArr[position]);
+
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        Fragment fragment=null;
+
+        switch (position)
+        {
+
+            case main_fragment:
+            {
+
+                fragment=fragmentManager.findFragmentByTag(fragement_tagArr[position]);
+                if(fragment==null)
+                {
+                    fragment=mainFragment.newInstance(navigationArr[position],fragement_tagArr[position]);
+                    fragmentTransaction.add(R.id.fragment_container, fragment, fragement_tagArr[position]);
+                }
+
+            }
+            break;
+
+
+            case record_fragment:
+            {
+                fragment=fragmentManager.findFragmentByTag(fragement_tagArr[position]);
+                if(fragment==null)
+                {
+                    fragment=RecordFragment.newInstance(navigationArr[position],fragement_tagArr[position]);
+                    fragmentTransaction.add(R.id.fragment_container, fragment, fragement_tagArr[position]);
+                }
+            }
+            break;
+        }
+
+        Log.i("fDebug","curFragment :"+(curFragment==null ?"null ":"not null"));
+        if(curFragment!=null)
+            fragmentTransaction.hide(curFragment);
+        if(fragment.isDetached())
+            fragmentTransaction.attach(fragment);
+        fragmentTransaction.show(fragment);
+        curFragment=fragment;
+        fragmentTransaction.commit();
+
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 

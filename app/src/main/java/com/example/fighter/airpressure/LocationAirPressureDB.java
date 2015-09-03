@@ -108,6 +108,7 @@ public class LocationAirPressureDB extends SQLiteOpenHelper {
             data.lantitude=cursor.getDouble(i++);
             data.longtitude=cursor.getDouble(i++);
             data.recordtime=cursor.getString(i++);
+            list.add(data);
         }
 
         return list;
